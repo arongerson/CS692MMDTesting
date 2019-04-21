@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mmd.factory.DmaFmtFactory;
-import mmd.util.Util;
+import mmd.factory.XmlFactory;
 
 public class ModuleFactory {
-
-	private static final String FILENAME_XML_TAG = "filename";
-	private static final String MMD_XML_TAG = "mmd"; 
 	private static List<Module> modules = new ArrayList<Module>();
 
 	public static void parse(List<String> dmaFileLines) throws Exception {
@@ -95,37 +92,8 @@ public class ModuleFactory {
 	}
 
 	public static void createXmlFile(String filename) {
-		StringBuffer xmlText = new StringBuffer(Util.createOpenXmlTag(MMD_XML_TAG)); 
-		xmlText.append(String.format("%s%s%s", Util.createOpenXmlTag(FILENAME_XML_TAG), filename, Util.createCloseXmlTag(FILENAME_XML_TAG))); 
-		createCloneGroupsXml(xmlText);
-		createModuleXml(xmlText);
-		createConnectionXml(xmlText);
-		xmlText.append(Util.createCloseXmlTag(MMD_XML_TAG));
+		StringBuffer xmlText = XmlFactory.generateXml(filename, modules);
 		System.out.println(xmlText.toString());
-	}
-
-	private static void createConnectionXml(StringBuffer xmlText) {
-		for (Module module : modules) {
-			if (!module.isSecondaryClone()) {
-				module.createConnectionTag(xmlText);
-			}
-		}
-	}
-
-	private static void createModuleXml(StringBuffer xmlText) {
-		for (Module module : modules) {
-			if (!(module.isPrimaryClone() || module.isSecondaryClone())) {
-				module.createModuleXmlTag(xmlText);
-			}
-		}
-	}
-
-	private static void createCloneGroupsXml(StringBuffer xmlText) {
-		for (Module module : modules) {
-			if (module.isPrimaryClone()) {
-				module.createCloneGroupXml(xmlText);
-			}
-		}
 	}
 
 	public static void printModuleInfo() {

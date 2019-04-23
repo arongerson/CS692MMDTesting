@@ -68,7 +68,7 @@ public class DmaFmtFactory {
 		} else if (formatTypeExists(tokens[0].trim())) {
 			throw new Exception("the format type already exists");
 		}
-		FormatTypes.DmaFmt dmaFmt = new FormatTypes.IntegerFormat(tokens[0].trim(), index);
+		FormatTypes.DmaFmt dmaFmt = new FormatTypes.IntegerFormat(tokens[0].trim(), "", index);
 		formatTypes.add(dmaFmt);
 	}
 
@@ -88,7 +88,7 @@ public class DmaFmtFactory {
 		} else if (formatTypeExists(tokens[0].trim())) {
 			throw new Exception("the format type already exists");
 		}
-		FormatTypes.DmaFmt dmaFmt = new FormatTypes.OtherFormat(tokens[0].trim(), index);
+		FormatTypes.DmaFmt dmaFmt = new FormatTypes.StringFormat(tokens[0].trim(), index);
 		formatTypes.add(dmaFmt);
 	}
 

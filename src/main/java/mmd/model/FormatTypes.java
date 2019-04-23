@@ -8,23 +8,24 @@ public class FormatTypes {
 	public static final String XMI_ID = "XMI_ID";
 	public static final String INT = "INT";
 	public static final String ENUM = "ENUM";
+	public static final String ENUM2 = "ENUM2";
 	public static final String CLONE_MIXED_TYPE = "CLONE_MIXED_TYPE";
 	public static final String ENDING_LINENO = "ENDING_LINENO";
 	public static final String CWE = "CWE";
 	public static final String TEST_NUMBER = "TEST_NUMBER";
+	public static final String CLONE = "CLONE";
+	public static final String CLONE_ID = "CLONE_ID";
 	public static final String CLONE_TYPE = "CLONE_TYPE";
 	public static final String ID = "ID";
 	public static final String FILENAME = "FILENAME";
 	public static final String CHANGE = "CHANGE";
-	public static final String ENUM2 = "ENUM2";
-	public static final String CLONE_ID = "CLONE_ID";
 	public static final String CATEGORY = "CATEGORY";
 	public static final String SIGNATURE = "SIGNATURE";
 	public static final String TYPE = "TYPE";
+	public static final String TYPE2 = "TYPE2";
 	public static final String DMA_ID = "DMA_ID";
 	public static final String CHAR = "CHAR";
 	public static final String EFFORT = "EFFORT";
-	public static final String CLONE = "CLONE";
 	public static final String BEGINNING_LINENO = "BEGINNING_LINENO";
 	public static final String VULNERABILITY = "VULNERABILITY";
 	public static final String BENCHMARK_FILENAME = "BENCHMARK_FILENAME";
@@ -56,42 +57,8 @@ public class FormatTypes {
 		}
 		
 		public abstract void validate(String token) throws Exception ;
-	}
-	
-	public static class NameFormat extends DmaFmt {
-		public NameFormat(String key, int index) {
-			super(key, "", index);
-		}
 		
-		public void validate(String token) throws Exception {
-			
-		}
-	}
-	
-	public static class MetricFormat extends DmaFmt {
-		public MetricFormat(String key, String value, int index) {
-			super(key, value, index);
-		}
-		
-		public void validate(String token) throws Exception {
-			int metric = Integer.parseInt(token);
-			if (metric < 0) {
-				throw new Exception("invalid metric");
-			}
-		}
-	}
-	
-	public static class XmlFormat extends DmaFmt {
-		public XmlFormat(String key, String value, int index) {
-			super(key, value, index);
-		}
-		
-		public void validate(String token) throws Exception {
-			int metric = Integer.parseInt(token);
-			if (metric < 0) {
-				throw new Exception("invalid metric");
-			}
-		}
+		public static void validateCount() throws Exception {}
 	}
 	
 	public static class Integer01Format extends DmaFmt {
@@ -108,8 +75,8 @@ public class FormatTypes {
 	}
 	
 	public static class IntegerFormat extends DmaFmt {
-		public IntegerFormat(String key, int index) {
-			super(key, "", index); // the empty string is for value which for other formats is empty
+		public IntegerFormat(String key, String value, int index) {
+			super(key, value, index); // the empty string is for value which for other formats is empty
 		}
 		
 		public void validate(String text) throws Exception {
@@ -120,8 +87,8 @@ public class FormatTypes {
 		}
 	}
 	
-	public static class OtherFormat extends DmaFmt {
-		public OtherFormat(String key, int index) {
+	public static class StringFormat extends DmaFmt {
+		public StringFormat(String key, int index) {
 			super(key, "", index); // the empty string is for value which for other formats is empty
 		}
 		
@@ -129,5 +96,39 @@ public class FormatTypes {
 			
 		}
 	}
-
+	
+	public static class NameFormat extends StringFormat {
+		
+		public NameFormat(String key, int index) {
+			super(key, index);
+		}
+	}
+	
+	public static class MetricFormat extends IntegerFormat {
+		
+		public MetricFormat(String key, String value, int index) {
+			super(key, value, index);
+		}
+		
+		public void validate(String token) throws Exception {
+			int metric = Integer.parseInt(token);
+			if (metric < 0) {
+				throw new Exception("invalid metric");
+			}
+		}
+	}
+	
+	public static class XmlFormat extends IntegerFormat {
+		
+		public XmlFormat(String key, String value, int index) {
+			super(key, value, index);
+		}
+		
+		public void validate(String token) throws Exception {
+			int metric = Integer.parseInt(token);
+			if (metric < 0) {
+				throw new Exception("invalid metric");
+			}
+		}
+	}
 }

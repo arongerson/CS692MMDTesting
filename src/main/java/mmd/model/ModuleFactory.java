@@ -7,9 +7,12 @@ import mmd.factory.DmaFmtFactory;
 import mmd.factory.XmlFactory;
 
 public class ModuleFactory {
+	
 	private static List<Module> modules = new ArrayList<Module>();
+	private static DmaFmtFactory dmaFmtFactory;
 
-	public static void parse(List<String> dmaFileLines) throws Exception {
+	public static void parse(List<String> dmaFileLines, DmaFmtFactory dmaFmtFactory) throws Exception {
+		ModuleFactory.dmaFmtFactory = dmaFmtFactory;
 		for (String line : dmaFileLines) {
 			processModuleText(line.trim());
 		}
@@ -19,9 +22,9 @@ public class ModuleFactory {
 		line = line.replace("\t", " ");
 		String[] tokens = line.split("\\s+");
 		for (int i = 0; i < tokens.length; i++) {
-			DmaFmtFactory.validate(i, tokens[i].trim());
+			dmaFmtFactory.validate(i, tokens[i].trim());
 		}
-		Module module = new Module(tokens[DmaFmtFactory.getModuleNameIndex()].trim(), tokens);
+		Module module = new Module(tokens[dmaFmtFactory.getModuleNameIndex()].trim(), tokens, dmaFmtFactory);
 		modules.add(module);
 	}
 
@@ -43,7 +46,7 @@ public class ModuleFactory {
 	}
 
 	private static int calculateDistance(List<Integer> differingFormatTypes, int i, int j) {
-		int[] distanceIndices = DmaFmtFactory.distanceIndices;
+		int[] distanceIndices = dmaFmtFactory.distanceIndices;
 		int distance = 0;
 		String[] data1 = modules.get(i).getData();
 		String[] data2 = modules.get(j).getData();
@@ -92,7 +95,7 @@ public class ModuleFactory {
 	}
 
 	public static void createXmlFile(String filename) {
-		StringBuffer xmlText = XmlFactory.generateXml(filename, modules);
+		StringBuffer xmlText = XmlFactory.generateXml(filename, modules, dmaFmtFactory);
 		System.out.println(xmlText.toString());
 	}
 

@@ -1,5 +1,6 @@
 package mmd.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,9 +12,19 @@ public class Util {
 	private Util() {}
 	
 	
-	public static List<String> readFile(String dir, String file) throws IOException { 
-		Path path = Paths.get(dir, file);
-		return Files.readAllLines(path);
+	public static List<String> readFile(String dir, String filename) throws IOException { 
+		File file = new File(dir + filename);
+		if (file.exists()) {
+			Path path = Paths.get(dir, filename);
+			return Files.readAllLines(path);
+		} else {
+			throw new IOException(getFileExtension(filename) + " file does not exist.");
+		}
+	}
+	
+	public static String getFileExtension(String filename) {
+		int index = filename.lastIndexOf(".");
+		return filename.substring(index + 1);
 	}
 
 	public static String createOpenXmlTag(String xmlTagName) {

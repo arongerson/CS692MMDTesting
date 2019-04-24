@@ -16,17 +16,19 @@ public class Module {
 	private Set<Module> clones = new HashSet<>();
 	private List<Integer> differingFormatTypes = new ArrayList<>();
 	private List<ModuleConnection> connections = new ArrayList<>();
+	private DmaFmtFactory dmaFmtFactory;
 	private boolean primaryClone;
 	private boolean secondaryClone;
 	private boolean visited;
 	
-	public Module(String name, String[] data) {
+	public Module(String name, String[] data, DmaFmtFactory dmaFmtFactory) {
 		this.name = name;
 		this.data = data;
 		distance = -1;
 		primaryClone = false;
 		secondaryClone = false;
 		visited = false;
+		this.dmaFmtFactory = dmaFmtFactory;
 	}
 	
 	public String getName() {
@@ -119,7 +121,7 @@ public class Module {
 	private String createCommaSeparatedDifferingFormatTypes() {
 		StringBuffer formatTypes = new StringBuffer("\"");
 		for (int index : differingFormatTypes) {
-			formatTypes.append(DmaFmtFactory.getDistanceFormatName(index)).append(",");
+			formatTypes.append(dmaFmtFactory.getDistanceFormatName(index)).append(",");
 		}
 		formatTypes.append("\"");
 		return formatTypes.deleteCharAt(formatTypes.length() - 2).toString();

@@ -27,7 +27,10 @@ public class XmlFactory {
 	private static final String METRIC_XML_TAG = "metric";
 	private static final String METRIC_NAME__XML_TAG = "metric_name";
 	
-	public static StringBuffer generateXml(String filename, List<Module> modules) {
+	private static DmaFmtFactory dmaFmtFactory;
+	
+	public static StringBuffer generateXml(String filename, List<Module> modules, DmaFmtFactory dmaFmtFactory) {
+		XmlFactory.dmaFmtFactory = dmaFmtFactory;
 		StringBuffer xmlText = new StringBuffer(Util.createOpenXmlTag(MMD_XML_TAG)); 
 		xmlText.append(String.format("%s%s%s", Util.createOpenXmlTag(FILENAME_XML_TAG), filename, Util.createCloseXmlTag(FILENAME_XML_TAG))); 
 		createCloneGroupsXml(xmlText, modules);
@@ -148,7 +151,7 @@ public class XmlFactory {
 	private static void createMetricTag(StringBuffer xmlText, int index, Module module) {
 		Module closestModule = module.getClsestModule();
 		xmlText.append(Util.createOpenXmlTag(METRIC_XML_TAG));
-		xmlText.append(String.format("%s%s%s", Util.createOpenXmlTag(METRIC_NAME__XML_TAG), DmaFmtFactory.getDistanceFormatName(index), Util.createCloseXmlTag(METRIC_NAME__XML_TAG))); 
+		xmlText.append(String.format("%s%s%s", Util.createOpenXmlTag(METRIC_NAME__XML_TAG), dmaFmtFactory.getDistanceFormatName(index), Util.createCloseXmlTag(METRIC_NAME__XML_TAG))); 
 		createMetricValueTag(xmlText, module, index);
 		createMetricValueTag(xmlText, closestModule, index);
 		xmlText.append(Util.createCloseXmlTag(METRIC_XML_TAG));
